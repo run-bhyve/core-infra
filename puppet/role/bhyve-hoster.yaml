@@ -1,0 +1,105 @@
+classes:
+  - dynmotd
+  - loginconf
+  - timezone
+  - sudo
+  - profile::file
+  - profile::sysctl
+  - profile::custom_facts
+
+sudo::configs:
+  "wheelgroup":
+    "content": "%wheel ALL=(ALL) NOPASSWD: ALL"
+    "priority": 10
+  "cbsd_sudoers":
+    "content": |
+      Defaults     env_keep += "workdir DIALOG NOCOLOR CBSD_RNODE"
+      Cmnd_Alias   CBSD_CMD = /usr/local/cbsd/sudoexec/*,/usr/local/cbsd/sudoexec/*
+      cbsd   ALL=(ALL) NOPASSWD:SETENV: CBSD_CMD
+    "priority": 10
+
+profile::file::entries:
+  /var/coredumps:
+    ensure: "directory"
+    path: "/var/coredumps"
+    group: 0
+    owner: 0
+    mode: "0777"
+
+profile::sysctl::entries:
+  kern.init_shutdown_timeout:
+    value: 900
+  security.bsd.see_other_uids:
+    value: 0
+  security.bsd.see_other_gids:
+    value: 0
+  net.inet.icmp.icmplim:
+    value: 0
+  net.inet.tcp.fast_finwait2_recycle:
+    value: 1
+  net.inet.tcp.recvspace:
+    value: 262144
+  net.inet.tcp.sendspace:
+    value: 262144
+  kern.ipc.shm_use_phys:
+    value: 1
+  kern.ipc.shmall:
+    value: 262144
+  kern.ipc.shmmax:
+    value: 1073741824
+  kern.maxfiles:
+    value: 2048000
+  kern.maxfilesperproc:
+    value: 200000
+  net.inet.ip.intr_queue_maxlen:
+    value: 2048
+  net.inet.ip.portrange.first:
+    value: 1024
+  net.inet.ip.portrange.last:
+    value: 65535
+  net.inet.ip.portrange.randomized:
+    value: 0
+  net.inet.tcp.maxtcptw:
+    value: 40960
+  net.inet.tcp.msl:
+    value: 10000
+  net.inet.tcp.nolocaltimewait:
+    value: 1
+  net.inet.tcp.syncookies:
+    value: 1
+  net.inet.udp.maxdgram:
+    value: 18432
+  net.local.stream.recvspace:
+    value: 262144
+  net.local.stream.sendspace:
+    value: 262144
+  vfs.zfs.prefetch_disable:
+    value: 1
+  kern.corefile:
+    value: /var/coredumps/%N.core
+  kern.sugid_coredump:
+    value: 1
+  kern.ipc.shm_allow_removed:
+    value: 1
+  kern.shutdown.poweroff_delay:
+    value: 500
+  kern.vt.enable_bell:
+    value: 0
+  dev.netmap.buf_size:
+    value: 12288
+  vm.max_user_wired:
+    value: '-1'
+  net.inet.ip.forwarding:
+    value: 1
+  net.inet6.ip6.forwarding:
+    value: 1
+  net.inet6.ip6.rfc6204w3:
+    value: 1
+  vfs.nfsd.enable_stringtouid:
+    value: 1
+  vfs.nfs.enable_uidtostring:
+    value: 1
+  vfs.zfs.min_auto_ashift:
+    value: 12
+#  kern.iscsi.fail_on_disconnection:
+#    value: 1
